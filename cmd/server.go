@@ -3,12 +3,23 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"github.com/s0h311/go-webserver/internal/utils"
 	"io"
 	"net"
 	"strings"
 )
 
+type WebserverConfig struct {
+	RootDir string
+}
+
+var config WebserverConfig
+
 func main() {
+	config = WebserverConfig{
+		RootDir: utils.GetEnv("GO_WEBSERVER_ROOT_DIR"),
+	}
+
 	listener, err := net.Listen("tcp", ":8080")
 
 	if err != nil {
@@ -24,14 +35,6 @@ func main() {
 
 		go handleConnection(conn)
 	}
-}
-
-type WebserverConfig struct {
-	RootDir string
-}
-
-var config WebserverConfig
-  RootDir: "tmp"
 }
 
 func handleConnection(conn net.Conn) {
